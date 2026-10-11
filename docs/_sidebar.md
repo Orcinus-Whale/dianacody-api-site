@@ -1,0 +1,9 @@
+- 文档索引
+  - [快速开始](quickstart.md)
+  - [鉴权说明](auth.md)
+- 接口参考
+  - 二级子目录
+    - [对话补全](api/chat.md)
+    - [向量嵌入](api/embedding.md)
+- 说明文档
+  - [错误码说明](error.md)
