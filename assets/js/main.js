@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async() => {
       return val;
     }
     //若内存没有,则发起http请求网络
-    const res = await fetch('./docs/' + path);
+    const res = await fetch('/docs/' + path);   //根目录绝对路径,不是相对路径./docs/
     const text = await res.text();
     // LRU:超过内存上限,删除最久未用的（Map迭代顺序是插入顺序）
     if(mdCache.size >= MAX_CACHE_COUNT) {
@@ -76,7 +76,15 @@ document.addEventListener('DOMContentLoaded', async() => {
 
   // 3.加载侧边栏
   const sidebarNav = document.getElementById('sidebarNav');
-  const sidebarMD = await fetchMD('_sidebar.md');
+  let sidebarMD;
+  try {
+    sidebarMD = await fetchMD('_sidebar.md');
+  }
+  catch(err) {
+    sidebarNav.innerHTML = `<div style="padding:20px;color:var(--txt‑2)">侧边栏文档加载失败，请检查网络或文件路径...</div>`;
+    console.error("_sidebar.md加载失败: ", err);
+    throw err;
+  }
   /* ------- (1) 目录菜单栏文字:层级&收折 ------- */
   // 解析_sidebar.md无序列表，按markdown缩进构建‘目录栏-树节点’
   function parseSidebarMd(text) {
