@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     }
     //若内存没有,则发起http请求网络
     const res = await fetch('/docs/' + path);   //根目录绝对路径,不是相对路径./docs/
+    if(!res.ok) {
+      throw new Error(`HTTP ${res.status} ${path}`);
+    }
     const text = await res.text();
     // LRU:超过内存上限,删除最久未用的（Map迭代顺序是插入顺序）
     if(mdCache.size >= MAX_CACHE_COUNT) {
@@ -78,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async() => {
   const sidebarNav = document.getElementById('sidebarNav');
   let sidebarMD;
   try {
-    sidebarMD = await fetchMD('_sidebar.md');
+    sidebarMD = await fetchMD('sidebar.md');
   }
   catch(err) {
     sidebarNav.innerHTML = `<div style="padding:20px;color:var(--txt‑2)">侧边栏文档加载失败，请检查网络或文件路径...</div>`;
